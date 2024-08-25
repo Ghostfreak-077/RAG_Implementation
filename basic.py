@@ -24,7 +24,7 @@ question = "What kinds of pets do I like?"
 document = "My favorite pet is a cat."
 
 # text embedding
-embd = OllamaEmbeddings(model="snowflake-arctic-embed:33m")
+embd = OllamaEmbeddings(model="bge-large")
 query_result = embd.embed_query(question)
 document_result = embd.embed_query(document)
 
@@ -65,7 +65,7 @@ text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
 splits = text_splitter.split_documents(blog_docs)
 
 vectorstore = Chroma.from_documents(documents=splits, embedding=embd)
-retriever = vectorstore.as_retriever()
+retriever = vectorstore.as_retriever(search_kwargs={"k": 1})
 docs = retriever.get_relevant_documents("Task Decomposition")
 # print(docs)
 
